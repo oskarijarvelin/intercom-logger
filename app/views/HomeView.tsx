@@ -38,6 +38,7 @@ export default function MicrophoneComponent() {
     // Create a new SpeechRecognition instance and configure it
     recognitionRef.current = new window.webkitSpeechRecognition();
     recognitionRef.current.continuous = true;
+    recognitionRef.current.lang = "fi";
     recognitionRef.current.interimResults = true;
 
     // Event handler for speech recognition results
