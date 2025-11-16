@@ -65,6 +65,7 @@ export default function MicrophoneComponent() {
     const diffMinutes = Math.floor(diffSeconds / 60);
     const diffHours = Math.floor(diffMinutes / 60);
     
+    // Return relative time string based on the difference
     if (diffSeconds < 60) {
       return diffSeconds <= 1 ? t("justNow") : `${diffSeconds} ${t("secondsAgo")}`;
     } else if (diffMinutes < 60) {
