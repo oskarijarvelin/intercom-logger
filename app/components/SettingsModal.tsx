@@ -17,20 +17,6 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
   const [permissionGranted, setPermissionGranted] = useState(false);
 
-  if (!isOpen) return null;
-
-  const handleAddKeyword = () => {
-    if (newKeyword.trim()) {
-      addKeyword({
-        keyword: newKeyword.trim(),
-        color: selectedColor.value,
-        textColor: selectedColor.textColor,
-      });
-      setNewKeyword("");
-      setSelectedColor(colorOptions[0]);
-    }
-  };
-
   // Enumerate audio input devices when modal opens
   useEffect(() => {
     if (isOpen) {
@@ -53,6 +39,20 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
       enumerateDevices();
     }
   }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  const handleAddKeyword = () => {
+    if (newKeyword.trim()) {
+      addKeyword({
+        keyword: newKeyword.trim(),
+        color: selectedColor.value,
+        textColor: selectedColor.textColor,
+      });
+      setNewKeyword("");
+      setSelectedColor(colorOptions[0]);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
