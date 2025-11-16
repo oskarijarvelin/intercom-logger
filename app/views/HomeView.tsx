@@ -99,8 +99,15 @@ export default function MicrophoneComponent() {
       // Continue anyway with default device
     }
     
-    // Create a new SpeechRecognition instance and configure it
-    recognitionRef.current = new window.webkitSpeechRecognition();
+    // Create a new SpeechRecognition instance (feature detected) and configure it
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      console.error('SpeechRecognition API not supported in this browser.');
+      setIsTranscribing(false);
+      shouldTranscribeRef.current = false;
+      return;
+    }
+    recognitionRef.current = new SpeechRecognition();
     recognitionRef.current.continuous = true;
     // Set language based on user settings
     recognitionRef.current.lang = language === "fi" ? "fi-FI" : "en-US";
@@ -117,13 +124,7 @@ export default function MicrophoneComponent() {
       // Log the recognition results and update the transcript state
       //console.log(event.results);
       
-      // Show accumulated text + current transcript in real-time display
-      // This helps users see the complete sentence being built up before it's saved to the log
-      if (accumulatedTranscriptRef.current) {
-        setTranscriptionText(accumulatedTranscriptRef.current + " " + transcript);
-      } else {
-        setTranscriptionText(transcript);
-      }
+      setTranscriptionText(transcript);
 
       // If the result is final, use debounce logic to group words into complete sentences
       // This is especially important on mobile Chrome which treats each word as final
