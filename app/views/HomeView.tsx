@@ -399,7 +399,7 @@ export default function MicrophoneComponent() {
         <div className="w-full px-4 flex-1 flex flex-col">
           {/* Firefox Warning */}
           {isFirefox && showFirefoxWarning && (
-            <div className="w-full md:max-w-7xl m-auto bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-md p-4 my-4">
+            <div className="w-full md:max-w-7xl m-auto bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-md p-4 m-4">
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3">
                   <svg className="w-6 h-6 text-yellow-600 dark:text-yellow-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
