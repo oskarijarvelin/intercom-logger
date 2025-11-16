@@ -8,6 +8,7 @@ export const translations = {
     transcriptionComplete: "Transcription Complete",
     speakNow: "Speak now...",
     thanksForSpeaking: "Thanks for speaking.",
+    currentTranscription: "Current Transcription",
     messageLog: "Message Log",
     settings: "Settings",
     fontSize: "Font Size",
@@ -49,6 +50,7 @@ export const translations = {
     downloadAsJson: "Download as JSON",
     downloadAsPdf: "Download as PDF",
     noMessagesToDownload: "No messages to download",
+    viewOnGitHub: "View on GitHub",
   },
   fi: {
     appName: "Intercom Logger",
@@ -58,6 +60,7 @@ export const translations = {
     transcriptionComplete: "Prosessointi valmis",
     speakNow: "Puhu nyt...",
     thanksForSpeaking: "Kiitos puhumisesta.",
+    currentTranscription: "Nykyinen litterointi",
     messageLog: "Viestiloki",
     settings: "Asetukset",
     fontSize: "Fonttikoko",
@@ -99,6 +102,7 @@ export const translations = {
     downloadAsJson: "Lataa JSON-muodossa",
     downloadAsPdf: "Lataa PDF-muodossa",
     noMessagesToDownload: "Ei ladattavia viestejä",
+    viewOnGitHub: "Näytä GitHubissa",
   },
 };
 
