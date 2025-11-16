@@ -182,8 +182,10 @@ export default function MicrophoneComponent() {
           accumulatedTranscriptRef.current = transcript.trim();
         }
         
-        // Show the accumulated text (which now includes this final result)
-        setTranscriptionText(accumulatedTranscriptRef.current);
+        // Don't show accumulated final results in real-time display to avoid duplication
+        // The accumulated text will be added to message log by the debounce timer
+        // This prevents Mobile Chrome from showing: "Hello", "Hello world", "Hello world how", etc.
+        setTranscriptionText("");
 
         // Set a debounce timer to add the accumulated transcript to the message log
         // Wait 1.5 seconds after the last final result before committing to the log
@@ -194,9 +196,6 @@ export default function MicrophoneComponent() {
             const now = new Date();
             const timestamp = formatTimestamp(now);
             setMessageLog(prev => [{ text: accumulatedText, timestamp, createdAt: now }, ...prev]);
-            
-            // Clear the real-time transcription display since the message has been logged
-            setTranscriptionText("");
             
             // Check for predefined commands
             for (const command in commands) {
@@ -212,12 +211,9 @@ export default function MicrophoneComponent() {
           debounceTimerRef.current = null;
         }, 1500);
       } else {
-        // For interim results, show accumulated text + current interim transcript
-        if (accumulatedTranscriptRef.current) {
-          setTranscriptionText(accumulatedTranscriptRef.current + " " + transcript);
-        } else {
-          setTranscriptionText(transcript);
-        }
+        // For interim results, show the current interim transcript only
+        // Don't include accumulated text to avoid duplication
+        setTranscriptionText(transcript);
       }
     };
 
