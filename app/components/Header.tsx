@@ -20,16 +20,31 @@ export default function Header({ isTranscribing, onToggleTranscription, onOpenSe
         </h1>
         
         <div className="flex items-center gap-4">
-          {/* Recognition Toggle */}
+          {/* Recognition Toggle - ON/OFF with icons */}
           <button
             onClick={onToggleTranscription}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
               isTranscribing
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : "bg-blue-500 hover:bg-blue-600 text-white"
+                ? "bg-red-500 hover:bg-red-600 text-white shadow-lg"
+                : "bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200"
             }`}
+            aria-label={isTranscribing ? "Turn OFF" : "Turn ON"}
           >
-            {isTranscribing ? t("stopRecording") : t("startRecording")}
+            {isTranscribing ? (
+              <>
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <circle cx="10" cy="10" r="8" />
+                </svg>
+                <span className="font-semibold">ON</span>
+              </>
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 20 20">
+                  <circle cx="10" cy="10" r="8" />
+                </svg>
+                <span className="font-semibold">OFF</span>
+              </>
+            )}
           </button>
 
           {/* Settings Icon */}

@@ -176,6 +176,21 @@ export default function MicrophoneComponent() {
     };
   }, []);
 
+  // Effect to restart speech recognition when language changes during active recording
+  useEffect(() => {
+    if (isTranscribing && recognitionRef.current) {
+      // Stop current recognition
+      shouldTranscribeRef.current = false;
+      recognitionRef.current.stop();
+      
+      // Small delay to ensure clean stop before restart
+      setTimeout(() => {
+        shouldTranscribeRef.current = true;
+        startTranscription();
+      }, 200);
+    }
+  }, [language]);
+
   // Detect Firefox browser
   useEffect(() => {
     const isFirefoxBrowser = typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent);
