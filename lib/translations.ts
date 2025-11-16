@@ -1,7 +1,7 @@
 // Translation strings for the application
 export const translations = {
   en: {
-    appName: "Solidcom Logger",
+    appName: "Intercom Logger",
     startRecording: "Start Recording",
     stopRecording: "Stop Recording",
     transcribing: "Transcribing",
@@ -24,11 +24,11 @@ export const translations = {
     save: "Save",
   },
   fi: {
-    appName: "Solidcom Logger",
+    appName: "Intercom Logger",
     startRecording: "Aloita tallennus",
     stopRecording: "Pysäytä tallennus",
-    transcribing: "Purkaa",
-    transcriptionComplete: "Purku valmis",
+    transcribing: "Prosessoi...",
+    transcriptionComplete: "Prosessointi valmis",
     speakNow: "Puhu nyt...",
     thanksForSpeaking: "Kiitos puhumisesta.",
     messageLog: "Viestiloki",

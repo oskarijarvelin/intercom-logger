@@ -51,8 +51,7 @@ export default function MicrophoneComponent() {
 
   // Predefined commands
   const commands: Commands = {
-    "hello": () => alert("Hello!"),
-    "open google": () => window.open("https://www.google.com", "_blank")
+    "rickroll": () => window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank")
     // Add more commands as needed
   };
 
@@ -209,11 +208,11 @@ export default function MicrophoneComponent() {
   const getFontSizeClass = () => {
     switch (fontSize) {
       case "small":
-        return "text-sm";
+        return "text";
       case "large":
-        return "text-lg";
+        return "text-4xl";
       default:
-        return "text-base";
+        return "text-xl";
     }
   };
 

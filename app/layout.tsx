@@ -6,7 +6,7 @@ import { SettingsProvider } from '@/lib/SettingsContext'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Solidcom Logger',
+  title: 'Intercom Logger',
   description: 'Voice to text logger application',
 }
 
