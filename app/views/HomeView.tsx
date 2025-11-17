@@ -29,7 +29,7 @@ type MessageLogEntry = {
 // Export the MicrophoneComponent function component
 export default function MicrophoneComponent() {
   // Settings context
-  const { language, fontSize, keywords, audioInputDeviceId, audioChannelCount, audioChannelIndex, transcriptionService, openaiApiKey, mistralApiKey, t } = useSettings();
+  const { language, fontSize, keywords, audioInputDeviceId, audioChannelCount, audioChannelIndex, transcriptionService, openaiApiKey, mistralApiKey, elevenlabsApiKey, t } = useSettings();
   
   // State variables to manage transcription status and text
   const [isTranscribing, setIsTranscribing] = useState(false);
@@ -107,6 +107,14 @@ export default function MicrophoneComponent() {
         shouldTranscribeRef.current = false;
         return;
       }
+    } else if (transcriptionService === 'elevenlabs') {
+      apiKey = elevenlabsApiKey || process.env.NEXT_PUBLIC_ELEVENLABS_API_KEY || '';
+      if (!apiKey) {
+        alert(t("apiKeyRequired"));
+        setIsTranscribing(false);
+        shouldTranscribeRef.current = false;
+        return;
+      }
     }
     
     // Create transcription service
@@ -175,7 +183,7 @@ export default function MicrophoneComponent() {
             debounceTimerRef.current = null;
           }, 1500);
         } else {
-          // For OpenAI and Mistral, add directly to message log
+          // For OpenAI, Mistral, and Eleven Labs, add directly to message log
           const now = new Date();
           const timestamp = formatTimestamp(now);
           setMessageLog(prev => [{ text: text, timestamp, createdAt: now }, ...prev]);

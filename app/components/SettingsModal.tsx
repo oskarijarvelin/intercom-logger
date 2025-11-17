@@ -20,7 +20,7 @@ interface SettingsModalProps {
 }
 
 export default function SettingsModal({ isOpen, onClose, messageLog }: SettingsModalProps) {
-  const { language, setLanguage, theme, setTheme, fontSize, setFontSize, keywords, addKeyword, removeKeyword, audioInputDeviceId, setAudioInputDeviceId, audioChannelCount, setAudioChannelCount, audioChannelIndex, setAudioChannelIndex, transcriptionService, setTranscriptionService, openaiApiKey, setOpenaiApiKey, mistralApiKey, setMistralApiKey, t } = useSettings();
+  const { language, setLanguage, theme, setTheme, fontSize, setFontSize, keywords, addKeyword, removeKeyword, audioInputDeviceId, setAudioInputDeviceId, audioChannelCount, setAudioChannelCount, audioChannelIndex, setAudioChannelIndex, transcriptionService, setTranscriptionService, openaiApiKey, setOpenaiApiKey, mistralApiKey, setMistralApiKey, elevenlabsApiKey, setElevenlabsApiKey, t } = useSettings();
   const [newKeyword, setNewKeyword] = useState("");
   const [selectedColor, setSelectedColor] = useState(colorOptions[0]);
   const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([]);
@@ -262,11 +262,24 @@ export default function SettingsModal({ isOpen, onClose, messageLog }: SettingsM
                   Fast and efficient transcription
                 </div>
               </button>
+              <button
+                onClick={() => setTranscriptionService("elevenlabs")}
+                className={`px-4 py-3 rounded-lg border transition-colors text-left ${
+                  transcriptionService === "elevenlabs"
+                    ? "bg-blue-500 text-white border-blue-500"
+                    : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
+                }`}
+              >
+                <div className="font-medium">{t("elevenlabsTranscription")}</div>
+                <div className={`text-sm mt-1 ${transcriptionService === "elevenlabs" ? "text-blue-100" : "text-gray-500 dark:text-gray-400"}`}>
+                  High-quality speech-to-text
+                </div>
+              </button>
             </div>
           </div>
 
           {/* API Keys Section */}
-          {(transcriptionService === "openai" || transcriptionService === "mistral") && (
+          {(transcriptionService === "openai" || transcriptionService === "mistral" || transcriptionService === "elevenlabs") && (
             <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4">
               <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-400 mb-3">
                 {t("apiKeys")}
@@ -307,6 +320,24 @@ export default function SettingsModal({ isOpen, onClose, messageLog }: SettingsM
                   />
                   <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
                     Get your API key from: <a href="https://console.mistral.ai/api-keys/" target="_blank" rel="noopener noreferrer" className="underline">console.mistral.ai/api-keys</a>
+                  </p>
+                </div>
+              )}
+              
+              {transcriptionService === "elevenlabs" && (
+                <div>
+                  <label className="block text-sm font-medium text-yellow-800 dark:text-yellow-400 mb-2">
+                    {t("elevenlabsAPIKey")}
+                  </label>
+                  <input
+                    type="password"
+                    value={elevenlabsApiKey}
+                    onChange={(e) => setElevenlabsApiKey(e.target.value)}
+                    placeholder={t("apiKeyPlaceholder")}
+                    className="w-full px-3 py-2 border border-yellow-300 dark:border-yellow-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                  />
+                  <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
+                    Get your API key from: <a href="https://elevenlabs.io/app/speech-synthesis/text-to-speech" target="_blank" rel="noopener noreferrer" className="underline">elevenlabs.io</a>
                   </p>
                 </div>
               )}

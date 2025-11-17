@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { Language, translations, TranslationKey } from "@/lib/translations";
 import { KeywordHighlight } from "@/lib/colors";
 
-export type TranscriptionService = "webspeech" | "openai" | "mistral";
+export type TranscriptionService = "webspeech" | "openai" | "mistral" | "elevenlabs";
 
 interface SettingsContextType {
   language: Language;
@@ -29,6 +29,8 @@ interface SettingsContextType {
   setOpenaiApiKey: (key: string) => void;
   mistralApiKey: string;
   setMistralApiKey: (key: string) => void;
+  elevenlabsApiKey: string;
+  setElevenlabsApiKey: (key: string) => void;
   t: (key: TranslationKey) => string;
 }
 
@@ -45,6 +47,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [transcriptionService, setTranscriptionService] = useState<TranscriptionService>("webspeech");
   const [openaiApiKey, setOpenaiApiKey] = useState<string>("");
   const [mistralApiKey, setMistralApiKey] = useState<string>("");
+  const [elevenlabsApiKey, setElevenlabsApiKey] = useState<string>("");
 
   // Load settings from localStorage on mount
   useEffect(() => {
@@ -58,6 +61,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     const savedTranscriptionService = localStorage.getItem("transcriptionService") as TranscriptionService;
     const savedOpenaiApiKey = localStorage.getItem("openaiApiKey");
     const savedMistralApiKey = localStorage.getItem("mistralApiKey");
+    const savedElevenlabsApiKey = localStorage.getItem("elevenlabsApiKey");
 
     if (savedLanguage) setLanguage(savedLanguage);
     if (savedTheme) setTheme(savedTheme);
@@ -69,6 +73,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     if (savedTranscriptionService) setTranscriptionService(savedTranscriptionService);
     if (savedOpenaiApiKey) setOpenaiApiKey(savedOpenaiApiKey);
     if (savedMistralApiKey) setMistralApiKey(savedMistralApiKey);
+    if (savedElevenlabsApiKey) setElevenlabsApiKey(savedElevenlabsApiKey);
   }, []);
 
   // Save settings to localStorage
@@ -118,6 +123,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("mistralApiKey", mistralApiKey);
   }, [mistralApiKey]);
 
+  useEffect(() => {
+    localStorage.setItem("elevenlabsApiKey", elevenlabsApiKey);
+  }, [elevenlabsApiKey]);
+
   const addKeyword = (keyword: KeywordHighlight) => {
     setKeywords([...keywords, keyword]);
   };
@@ -155,6 +164,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setOpenaiApiKey,
         mistralApiKey,
         setMistralApiKey,
+        elevenlabsApiKey,
+        setElevenlabsApiKey,
         t,
       }}
     >
