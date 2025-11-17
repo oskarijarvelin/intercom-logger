@@ -8,6 +8,7 @@ A real-time voice-to-text transcription application built with Next.js. Perfect 
   - Web Speech API (Browser-based, free)
   - OpenAI GPT-4o (High-quality AI transcription, requires API key)
   - Mistral AI Voxtral-mini (Fast and efficient, requires API key)
+  - Eleven Labs Scribe (High-quality speech-to-text, requires API key)
 - **Real-time Speech Recognition** - Automatic voice transcription
 - **Message Log** - All transcribed messages saved with timestamps in reverse chronological order
 - **Keyword Highlighting** - Highlight important keywords with custom colors
@@ -46,6 +47,8 @@ A real-time voice-to-text transcription application built with Next.js. Perfect 
   - Get your key from: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
 - **Mistral AI API Key** - Required only if using Mistral AI Voxtral-mini transcription
   - Get your key from: [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys/)
+- **Eleven Labs API Key** - Required only if using Eleven Labs Scribe transcription
+  - Get your key from: [elevenlabs.io](https://elevenlabs.io/app/speech-synthesis/text-to-speech)
 
 ## Getting Started
 
@@ -63,7 +66,7 @@ A real-time voice-to-text transcription application built with Next.js. Perfect 
    ```
 
 3. **(Optional) Configure API keys:**
-   If you want to use OpenAI or Mistral AI transcription services, create a `.env.local` file:
+   If you want to use OpenAI, Mistral AI, or Eleven Labs transcription services, create a `.env.local` file:
    ```bash
    cp .env.example .env.local
    ```
@@ -71,6 +74,7 @@ A real-time voice-to-text transcription application built with Next.js. Perfect 
    ```
    NEXT_PUBLIC_OPENAI_API_KEY=your_openai_key_here
    NEXT_PUBLIC_MISTRAL_API_KEY=your_mistral_key_here
+   NEXT_PUBLIC_ELEVENLABS_API_KEY=your_elevenlabs_key_here
    ```
    
    **Note:** You can also configure API keys directly in the application settings (they will be stored in your browser's local storage).
@@ -151,7 +155,8 @@ Click the **settings icon** (⚙️) in the header to access:
   - **Web Speech API** - Free browser-based transcription (works offline, Chrome/Edge recommended)
   - **OpenAI GPT-4o** - High-quality AI transcription (requires API key, works in all browsers)
   - **Mistral AI Voxtral-mini** - Fast and efficient transcription (requires API key, works in all browsers)
-- **API Keys** - Enter your OpenAI or Mistral AI API key when using those services
+  - **Eleven Labs Scribe** - High-quality speech-to-text (requires API key, works in all browsers)
+- **API Keys** - Enter your OpenAI, Mistral AI, or Eleven Labs API key when using those services
 - **Theme** - Switch between light and dark modes
 - **Font Size** - Adjust text size for better readability
 - **Audio Input Device** - Select your preferred microphone
@@ -243,16 +248,17 @@ We welcome contributions! Here's how to get started:
 - **[Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)** - Browser-native speech recognition
 - **[OpenAI Whisper API](https://platform.openai.com/docs/guides/speech-to-text)** - GPT-4o based transcription
 - **[Mistral AI API](https://docs.mistral.ai/)** - Voxtral-mini transcription service
+- **[Eleven Labs API](https://elevenlabs.io/docs)** - Scribe speech-to-text service
 - **[jsPDF](https://github.com/parallax/jsPDF)** - PDF generation (for export)
 
 ## Browser Compatibility
 
-| Browser | Web Speech API | OpenAI/Mistral | Notes |
-|---------|----------------|----------------|-------|
+| Browser | Web Speech API | OpenAI/Mistral/Eleven Labs | Notes |
+|---------|----------------|----------------------------|-------|
 | Chrome | ✅ Full | ✅ Full | Recommended for Web Speech API |
 | Edge | ✅ Full | ✅ Full | Recommended for Web Speech API |
-| Safari | ⚠️ Partial | ✅ Full | Limited Web Speech API, use OpenAI/Mistral for best results |
-| Firefox | ❌ None | ✅ Full | Use OpenAI or Mistral transcription services |
+| Safari | ⚠️ Partial | ✅ Full | Limited Web Speech API, use API services for best results |
+| Firefox | ❌ None | ✅ Full | Use OpenAI, Mistral, or Eleven Labs transcription services |
 | Opera | ✅ Full | ✅ Full | Chromium-based |
 
 ## License

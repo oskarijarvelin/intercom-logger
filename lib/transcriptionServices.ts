@@ -346,9 +346,133 @@ export class MistralTranscriptionService implements TranscriptionService {
   }
 }
 
+// Eleven Labs Transcription Service
+export class ElevenLabsTranscriptionService implements TranscriptionService {
+  private apiKey: string;
+  private mediaRecorder: MediaRecorder | null = null;
+  private audioChunks: Blob[] = [];
+  private isRecording = false;
+  private recordingInterval: NodeJS.Timeout | null = null;
+  private onResultCallback: ((result: TranscriptionResult) => void) | null = null;
+  private onErrorCallback: ((error: any) => void) | null = null;
+  private language: string = "en";
+
+  constructor(apiKey: string) {
+    this.apiKey = apiKey;
+  }
+
+  isSupported(): boolean {
+    return typeof window !== 'undefined' && 
+           typeof navigator !== 'undefined' && 
+           'mediaDevices' in navigator &&
+           this.apiKey.length > 0;
+  }
+
+  async start(language: string, onResult: (result: TranscriptionResult) => void, onError: (error: any) => void): Promise<void> {
+    if (!this.isSupported()) {
+      onError(new Error('Eleven Labs transcription is not supported or API key is missing'));
+      return;
+    }
+
+    this.language = language;
+    this.onResultCallback = onResult;
+    this.onErrorCallback = onError;
+    this.isRecording = true;
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      this.mediaRecorder = new MediaRecorder(stream);
+      
+      this.mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          this.audioChunks.push(event.data);
+        }
+      };
+
+      this.mediaRecorder.onstop = async () => {
+        if (this.audioChunks.length > 0 && this.isRecording) {
+          await this.transcribeAudio();
+        }
+      };
+
+      // Record in 5-second chunks for near real-time transcription
+      this.mediaRecorder.start();
+      this.recordingInterval = setInterval(() => {
+        if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
+          this.mediaRecorder.stop();
+          this.mediaRecorder.start();
+        }
+      }, 5000);
+
+    } catch (error) {
+      console.error('Error starting Eleven Labs transcription:', error);
+      onError(error);
+    }
+  }
+
+  private async transcribeAudio(): Promise<void> {
+    if (!this.onResultCallback || !this.onErrorCallback) return;
+
+    try {
+      const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+      this.audioChunks = [];
+
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'audio.webm');
+      formData.append('model_id', 'scribe-v1');
+      if (this.language === 'fi') {
+        formData.append('language', 'fi');
+      } else {
+        formData.append('language', 'en');
+      }
+
+      const response = await fetch('https://api.elevenlabs.io/v1/audio-to-text', {
+        method: 'POST',
+        headers: {
+          'xi-api-key': this.apiKey,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Eleven Labs API error: ${errorData.error?.message || response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.text && data.text.trim()) {
+        this.onResultCallback({ text: data.text.trim(), isFinal: true });
+      }
+    } catch (error) {
+      console.error('Error transcribing with Eleven Labs:', error);
+      this.onErrorCallback?.(error);
+    }
+  }
+
+  stop(): void {
+    this.isRecording = false;
+    
+    if (this.recordingInterval) {
+      clearInterval(this.recordingInterval);
+      this.recordingInterval = null;
+    }
+
+    if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+      this.mediaRecorder.stop();
+      this.mediaRecorder.stream.getTracks().forEach(track => track.stop());
+      this.mediaRecorder = null;
+    }
+
+    this.audioChunks = [];
+    this.onResultCallback = null;
+    this.onErrorCallback = null;
+  }
+}
+
 // Factory function to create transcription service
 export function createTranscriptionService(
-  type: 'webspeech' | 'openai' | 'mistral',
+  type: 'webspeech' | 'openai' | 'mistral' | 'elevenlabs',
   apiKey?: string
 ): TranscriptionService {
   switch (type) {
@@ -358,6 +482,8 @@ export function createTranscriptionService(
       return new OpenAITranscriptionService(apiKey || '');
     case 'mistral':
       return new MistralTranscriptionService(apiKey || '');
+    case 'elevenlabs':
+      return new ElevenLabsTranscriptionService(apiKey || '');
     default:
       return new WebSpeechTranscriptionService();
   }
